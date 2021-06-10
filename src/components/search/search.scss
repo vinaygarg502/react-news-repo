@@ -1,0 +1,17 @@
+@import './../../assets/styles/styls';
+.result-container{
+    @include container;
+    &--content{
+        @include container-content;
+        .loader-container {
+            grid-column: span 12;
+        }
+        .no-results--box{
+            grid-column: span 12;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            grid-row: span 12;
+        }
+    }
+}

@@ -1,0 +1,43 @@
+@import './../../assets/styles/styls.scss';
+.nav-heading {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-items: center;
+    column-gap: 10px;
+
+    @media (max-width:900px){
+        padding: 10px 0px;
+    }
+    h1 {
+        grid-column: span 6;
+        @media (max-width:900px){
+            grid-column: span 12;
+            grid-row: 2;
+            margin: 15px 0;
+        }
+    }
+    &--bookmark {
+        grid-column: span 3;
+        @media (max-width:900px){ 
+            grid-column: span 6;
+        }
+
+        button {
+            @include bookmark-btn;
+        }
+    }
+    &--filter{
+        grid-column: span 3;
+        
+        @media (max-width:900px){ 
+            grid-column: span 3/12;
+        }
+        select {
+            width: 100%;
+            border: 0;
+            border-bottom: 1px solid $black-color;
+            padding:  0 10px;
+            outline: 0;
+        }
+    }
+}

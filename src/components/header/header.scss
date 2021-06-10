@@ -1,0 +1,75 @@
+@import './../../assets/styles/styls.scss';
+header {
+    height: 125px;
+    padding: 0 10%;
+    background-color: $darkblue-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @media (max-width: 600px) {
+        position: relative;
+        height: 50px;
+        padding: 0;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .logo-container {
+        width: 150px;
+        @media (max-width: 600px) { 
+            width: 100px;
+        }
+        img {
+            width: 100% ;
+            height: auto;
+        }
+    }
+    .search-container {
+        display: flex;
+        align-self: flex-end;
+        border-bottom: 2px solid $white-color;
+        padding: 8px 30px;
+        color: $white-color;
+        max-height: 18px;
+
+        @media (max-width:600px){
+            position: absolute;
+            bottom: 0;
+            padding: 15px 10px;
+            justify-content: flex-end;
+        }
+
+        &.show {
+            background: $lightblue-color;
+            @media (max-width:600px){ 
+                width: 100%;
+            }
+        }
+
+        @keyframes toggleInput {
+            from {width: 0px;}
+            to {width:149px;}
+        }
+        @media (max-width:600px) {
+            @keyframes toggleInput {
+                from {width: 0;}
+                to {width:90%;}
+            }
+        }
+
+        input{
+            background: transparent;
+            outline: 0;
+            border: 0;
+            width: 149px;
+            animation: toggleInput 0.5s ease-out;
+            color: $white-color;
+            font-weight: 500;
+
+            @media (max-width:600px){
+                width: 90%;
+            }
+        }
+    }
+}
