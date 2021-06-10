@@ -19,8 +19,12 @@ const Header = ()=>{
         });
     };
     const changeHandler = (e)=>{
+        const value = e.target.value.trim();
+        if(!value){
+            return false;
+        }
         history.push({
-            pathname: `/search/?q=${e.target.value}`
+            pathname: `/search/?q=${value}`
         });
     }
     const debouncedChangeHandler = useCallback(
