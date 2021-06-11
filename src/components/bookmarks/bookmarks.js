@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './bookmarks.scss';
 import NavHeader from "../nav-header/nav-header";
 import NewsCard from "../newsCard/newsCard";
@@ -6,12 +6,13 @@ import { useHistory } from 'react-router-dom';
 
 const Bookmarks = ({bookmarks, getBookmarks})=>{
     const history = useHistory();
+    const [value, setValue] = useState('newest');
     const changeHandler = (e)=>{
-       getBookmarks(bookmarks, e.target.value)
+       setValue(e.target.value);
     };
     useEffect(()=>{
-        getBookmarks(bookmarks,'newest')
-    },[])
+        getBookmarks(bookmarks,value)
+    },[value])
 
     const clickHandler = (list)=>{
         history.push({

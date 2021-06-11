@@ -4,13 +4,13 @@ import NewsCard from "../newsCard/newsCard";
 import { useHistory } from 'react-router-dom';
 import './search.scss';
 let page=1;
-const Search = ({location, searchResults, loading, getSearchResults, getUpdatedSearchResults, getResultsByOrder})=>{
+const Search = ({location, searchResults, loading, getSearchResults, getUpdatedSearchResults, getResultsByOrder, cancelApi})=>{
     const options = {
         root: null,
         rootMargin: "20px",
         threshold: 1.0
      };
-    const query = (location.pathname.split('/')[2]).substr(3);
+    let query = (location.pathname.split('/')[2]).substr(3);
     const loader = useRef(null);
     const history = useHistory();
     useEffect(() => {
@@ -28,6 +28,12 @@ const Search = ({location, searchResults, loading, getSearchResults, getUpdatedS
         getSearchResults(query,1);
     },[query]);
 
+    useEffect(() => {
+        return () => {
+          cancelApi();
+        };
+    }, []);
+
     const changeHandler = (e)=>{
         getResultsByOrder(searchResults, e.target.value)
      };
@@ -40,7 +46,7 @@ const Search = ({location, searchResults, loading, getSearchResults, getUpdatedS
     };
     const handleObserver = (entities) => {
         const target = entities[0];
-        if (target.isIntersecting) { 
+        if (target.isIntersecting && Math.floor(target.intersectionRatio) === 1){ 
             page=page+1;
             getUpdatedSearchResults(query,page);
         }

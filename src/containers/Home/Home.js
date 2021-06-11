@@ -1,6 +1,6 @@
 import Home from '../../components/home/home';
 import { connect } from 'react-redux';
-import { getNews } from '../../actions';
+import { getNews, cancelApi } from '../../actions';
 
 const mapStateToProps = (state) => {
     let sectionData = {};
@@ -18,7 +18,8 @@ const mapStateToProps = (state) => {
     }
 };
 const mapDispatchToProps = (dispatch)=>({
-    getNews: (orderBy)=>{dispatch(getNews(orderBy))}
+    getNews: (orderBy)=>{dispatch(getNews(orderBy))},
+    cancelApi:()=>{dispatch(cancelApi())}
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

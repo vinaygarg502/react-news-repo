@@ -1,18 +1,25 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './home.scss';
 import NavHeader from "../nav-header/nav-header";
 import NewsCard from "../newsCard/newsCard";
 import { useHistory } from 'react-router-dom';
 
-const Home = ({news, articles,loading, error, getNews})=>{
+const Home = ({news, articles,loading, error, getNews, cancelApi})=>{
     const history = useHistory();
+    const [value,setValue] =  useState('newest');
 
     useEffect(() => {
-        getNews('newest');
-    },[getNews]);
+        getNews(value);
+    },[value]);
+
+    useEffect(() => {
+        return () => {
+          cancelApi();
+        };
+    }, []);
 
     const changeHandler = (e)=>{
-        getNews(e.target.value)
+        setValue(e.target.value);
     }
     const clickHandler = (list)=>{
         history.push({

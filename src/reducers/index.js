@@ -1,5 +1,4 @@
-const reducer = (state = {bookmarks:[],searchResults:[], page:1 }, action) => {
-    
+const reducer = (state = {bookmarks:[],searchResults:[], page:1 }, action) => { 
     switch (action.type) {
         case 'GET_NEWS':
             return { ...state, loading: true };
@@ -22,7 +21,7 @@ const reducer = (state = {bookmarks:[],searchResults:[], page:1 }, action) => {
         case 'SET_PAGE':
             return {...state,page:action.page}
         case "ERROR":
-            return {...state, loading:false,error:action.msg}
+            return {...state, loading:false,error:action.msg};
        default:
           return state;
      }

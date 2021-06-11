@@ -35,3 +35,6 @@ export const getUpdatedSearchResults = (query,pageNumber)=>({
     query,
     pageNumber
 });
+export const cancelApi = ()=>({
+    type:'CANCEL_API'
+})

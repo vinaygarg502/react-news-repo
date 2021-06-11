@@ -1,4 +1,4 @@
-import { put, takeLatest, all, call } from 'redux-saga/effects';
+import { put, takeLatest, all, call, fork, cancel} from 'redux-saga/effects';
 import {api, newsSection,otherSection,apiKey, showFields, element} from './../constants/index';
 
 function getResult(api){
@@ -46,18 +46,25 @@ function* fetchSearchResults({query,pageNumber}){
         const searchObj = yield call(getResult,`${api}search?section=${newsSection}&order-by=newest&show-elements=${element}&show-fields=${showFields}&page=${pageNumber}&page-size=15&q=${query}&api-key=${apiKey}`);
         
         if(pageNumber===1){
+            console.log(searchObj);
             yield put({type:"SEARCH_RESULTS", search:[...searchObj.results]});
         } else {
             yield put({type:"UPDATE_RESULTS", search:[...searchObj.results]});
         }
     } catch(error) {
+        console.log(error);
         yield put({type:"ERROR",msg:error});
     }
     
 }
 
 function* actionWatcher() {
-    yield takeLatest('GET_NEWS', fetchLatestNews);
+    yield takeLatest('GET_NEWS', fetchOrCancelHomeNews);
+}
+
+function *fetchOrCancelHomeNews({orderBy}) {
+    const searchTask = yield fork(fetchLatestNews,{orderBy});
+    yield watchCancelAPI(searchTask);
 }
 
 function* actionBookmarkWatcher() {
@@ -69,18 +76,31 @@ function* actionOrderByResultsWatcher() {
 }
 
 function* actionSearchResultWatcher(){
-    yield takeLatest('GET_RESULTS',fetchSearchResults)
+   yield takeLatest('GET_RESULTS', fetchOrCancelSearchResults);
 }
+
+function *fetchOrCancelSearchResults({query,pageNumber}) {
+    const searchTask = yield fork(fetchSearchResults,{query,pageNumber});
+    yield watchCancelAPI(searchTask);
+}
+function *watchCancelAPI(searchTask) {
+    yield takeLatest('CANCEL_API', () => cancelAPI(searchTask));
+}
+
+function *cancelAPI(searchTask) {
+    yield cancel(searchTask);
+}
+
 function* actionUpdateSearchResultWatcher(){
-    yield takeLatest('UPDATE_SEARCHRESULTS',fetchSearchResults)
+    yield takeLatest('UPDATE_SEARCHRESULTS',fetchOrCancelSearchResults);
 }
 
 export default function* rootSaga() {
     yield all([
         actionWatcher(),
         actionBookmarkWatcher(),
+        actionOrderByResultsWatcher(),
         actionSearchResultWatcher(),
-        actionUpdateSearchResultWatcher(),
-        actionOrderByResultsWatcher()
+        actionUpdateSearchResultWatcher()
     ]);
 }
